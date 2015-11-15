@@ -3,9 +3,9 @@ from pygame.locals import *
 import WilsonsAlgorithm
 from time import sleep
 
-width = 12
-height = 8
-scale = 50
+width = 5
+height = 5
+scale = 75
 
 N, S, E, W = 1, 2, 4, 8 #Flags for encoding connection
 DX =       {E:1, W:-1, N:0, S:0}
@@ -47,16 +47,39 @@ def mainLoop():
 	lines = loadLines()
 	x, y = 0, 0
 	path = []
-	for i in range(len(maze)):
-			for j in range(len(maze[i])):
-				screen.blit(tiles[maze[i][j]], pygame.Rect(i*scale, j*scale, scale, scale))
 	while not exiting:
 		#screen.fill(BACKGROUND)
+		display_maze(maze, tiles)
 		events = pygame.event.get()
 		path, x, y = get_key_input(path,x,y,maze,events)
 		display_path(path, lines)
 		pygame.display.flip()
+		print x, y
+		if x == width-1 and y == height-1:
+			print "exiting"
+			wintext = pygame.image.load("./maze-tiles/wintext.png")
+			print 374.0/(width*scale)
+			wintext = pygame.transform.scale(wintext, (width*scale, int(height*scale*((width*scale)/374.0))))
+			screen.blit(wintext, (0,(height-int(height*((width*scale)/374.0)))/2))
+			pygame.display.flip()
+			sleep(3)
+			break
 		exiting = checkExit(events)
+
+def gameOver():
+  start_time = pygame.time.get_ticks()
+  delay = 3*1000 #Number of seconds, times 1000, because the program returns in miliseconds
+  endText = game_over_font.render("You Win!", 1, (0,0,0))
+  while pygame.time.get_ticks() < (start_time + delay):
+    display.blit(endText, (470, 100))
+    pygame.display.flip()
+    clock.tick(60)
+
+
+def display_maze(maze, tiles):
+	for i in range(len(maze)):
+			for j in range(len(maze[i])):
+				screen.blit(tiles[maze[i][j]], pygame.Rect(i*scale, j*scale, scale, scale))
 
 def get_key_input(path, x, y, maze, events):
 	''' Takes in 'path' as a list of values: each one of which
