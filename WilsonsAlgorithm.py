@@ -50,12 +50,12 @@ def generate_maze(width = default_width, height = default_height):
 	''' Generates an array that contains
 	'''
 	grid = [[0 for i in range(height)] for j in range(width)]
-	print grid
+	#print grid
 	grid[randint(0,width-1)][randint(0,height-1)] = 'Initial'
 	remaining = width*height -1 # of unused cells
-	print "Starting Walk"
+	#print "Starting Walk"
 	while remaining > 0:
-		print "Remaining " + str(remaining)
+		#print "Remaining " + str(remaining)
 		path = walk(grid)
 		for i in path:
 			x,y,direction = i[0], i[1], i[2]
@@ -112,8 +112,9 @@ def walk(grid):
 		x, y = x + DX[direction], y + DY[direction]
 	return path
 
-maze = generate_maze()
-print_maze(maze)
+if __name__ == '__main__':
+	maze = generate_maze()
+	print_maze(maze)
 
 
 
